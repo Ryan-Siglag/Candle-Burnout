@@ -7,9 +7,8 @@ from django.forms import formset_factory
 from django.contrib.auth.decorators import login_required
 from datetime import datetime
 
-
-def hello_world(request):
-    return render(request, 'hello_world.html')
+# def hello_world(request):
+#     return render(request, 'hello_world.html')
 
 @login_required(login_url="/users/login")
 def inputs(request):
@@ -23,13 +22,14 @@ def inputs(request):
             new_entry = Entry(user=request.user, date=datetime.now())
             new_entry.save()
             
-            #Matchcnames to result types (shouldn't change)
-            result_scores = {           # Num Den #Calculated
+            #Must matchc names to results in db (which shouldn't change)
+            result_scores = { # 0-Numerator 1-Denomenator 2-Calculated
                 "Reduced accomplishment": [0, 0, 0],
                 "Emotional exhaustion": [0, 0, 0],
                 "Cynicism": [0, 0, 0],
             }
             
+            #Dynamic option:
             # result_scores = {}
             # results = Result.objects.all()
             # for res in results:
@@ -54,8 +54,8 @@ def inputs(request):
                 ques_entry.entry = new_entry
                 ques_entry.save()
 
-                question = Question.objects.get(pk=ques_entry.question.pk)
-                category = Category.objects.get(pk=question.category.pk)
+                question = Question.objects.filter(pk=ques_entry.question.pk).first()
+                category = Category.objects.filter(pk=question.category.pk).first()
 
                 raw_score = ques_entry.score
                 score = (((raw_score) * 2) / (5)) - 1 #Converts 0-5 range to -1-1 range
@@ -69,6 +69,8 @@ def inputs(request):
             new_entry.total_score = (result_scores['Reduced accomplishment'][2]+result_scores['Cynicism'][2]+result_scores['Emotional exhaustion'][2]) / 3
 
             new_entry.save()
+
+            return redirect('/display/recent')
 
         else:
             for form in question_forms:
@@ -88,7 +90,7 @@ def inputs(request):
 
         questions = []
         for question_type in Type.objects.filter(used=True):
-            new_ques = Question.objects.get(pk=select_question(question_type))
+            new_ques = Question.objects.filter(pk=select_question(question_type)).first()
             questions.append(new_ques)
 
         question_forms = QuestionFormSet()

@@ -8,7 +8,7 @@ def register(request):
         form = CustomUserCreationForm(request.POST)
         if form.is_valid():
             auth_login(request, form.save())
-            return redirect("/questions/input")
+            return redirect("/questions/inputs")
     else:
         form = CustomUserCreationForm()
 
