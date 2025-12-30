@@ -50,22 +50,21 @@ class Entry(models.Model):
     user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
     date = models.DateTimeField()
 
-    cynicism_score =  models.FloatField()
-    exhaustion_score = models.FloatField()
-    reduced_accomplishment_score = models.FloatField()
-
-    total_score = models.FloatField()
+    cynicism_score =  models.FloatField(null=True)
+    exhaustion_score = models.FloatField(null=True)
+    reduced_accomplishment_score = models.FloatField(null=True)
+    total_score = models.FloatField(null=True)
 
 class QuestionEntry(models.Model):
     entry = models.ForeignKey(Entry, on_delete=models.CASCADE)
     question = models.ForeignKey(Question, on_delete=models.CASCADE)
 
     class Agreement(models.IntegerChoices):
-        STRONGLY_DISAGREE = 1
-        DISAGREE = 2
-        SLIGHTLY_DISAGREE = 3
-        SLIGHTLY_AGREE = 4
-        AGREE = 5
-        STRONGLY_AGREE = 6
+        STRONGLY_DISAGREE = 0
+        DISAGREE = 1
+        SLIGHTLY_DISAGREE = 2
+        SLIGHTLY_AGREE = 3
+        AGREE = 4
+        STRONGLY_AGREE = 5
 
     score = models.IntegerField(choices=Agreement)

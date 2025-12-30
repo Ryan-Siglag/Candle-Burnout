@@ -1,5 +1,5 @@
 from django import forms
-from .models import QuestionEntry
+from .models import QuestionEntry, Question
 
 class SingleQuestionForm(forms.ModelForm):
     class Meta:
