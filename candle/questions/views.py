@@ -6,12 +6,19 @@ from .forms import *
 from django.forms import formset_factory
 from django.contrib.auth.decorators import login_required
 from datetime import datetime
+from candle.utils import entry_this_week
 
 # def hello_world(request):
 #     return render(request, 'hello_world.html')
 
 @login_required(login_url="/users/login")
 def inputs(request):
+
+    recent_entry = entry_this_week(request.user)
+
+    #Prevents multiple entries in one week
+    # if recent_entry:
+    #     return redirect('/display/recent')
 
     QuestionFormSet = formset_factory(SingleQuestionForm, extra=Type.objects.filter(used=True).count())
 
@@ -22,7 +29,7 @@ def inputs(request):
             new_entry = Entry(user=request.user, date=datetime.now())
             new_entry.save()
             
-            #Must matchc names to results in db (which shouldn't change)
+            # ** Must match names to results in db (which shouldn't change) **
             result_scores = { # 0-Numerator 1-Denomenator 2-Calculated
                 "Reduced accomplishment": [0, 0, 0],
                 "Emotional exhaustion": [0, 0, 0],

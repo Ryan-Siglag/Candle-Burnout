@@ -1,15 +1,11 @@
 import datetime
+from questions.models import Entry
 
-def dates_in_same_week(date1, date2):
-  # Ensure the inputs are date objects, if they are datetime objects
-  if isinstance(date1, datetime):
-    date1 = date1.date()
-  if isinstance(date2, datetime):
-    date2 = date2.date()
-
-  # Get the ISO year and week number for both dates
-  iso_year1, iso_week1, _ = date1.isocalendar()
-  iso_year2, iso_week2, _ = date2.isocalendar()
-
-  # Compare the year and week number
-  return iso_year1 == iso_year2 and iso_week1 == iso_week2
+def entry_this_week(user):
+    current_date = datetime.datetime.now()
+    iso_year, iso_week, _ = current_date.isocalendar()
+    recent_entry_set = Entry.objects.filter(user=user, date__iso_year=iso_year, date__week=iso_week)
+    
+    if recent_entry_set.exists():
+        return recent_entry_set.last()
+    return None

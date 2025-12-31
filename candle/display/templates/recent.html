@@ -1,6 +1,9 @@
 {% extends 'layout.html' %}
 {% block content %}
-<h1>Hello World</h1>
-<h2>Cynicism Score: </h2>
-{{recent_entry.cynicism_score}}
+<h1>Recent Entry</h1>
+<h2>Total Score: </h2>
+{{recent_entry.total_score}}
+<br><br>
+<a href='/display/all'>All Entries</a>
+
 {% endblock %}

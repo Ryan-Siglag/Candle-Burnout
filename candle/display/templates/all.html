@@ -1,0 +1,10 @@
+{% extends 'layout.html' %}
+{% block content %}
+<h1>Entries</h1>
+
+{% for entry in all_entries %}
+    <h2>{{entry.date}}</h2>
+    {{entry.total_score}}
+{% endfor %}
+
+{% endblock %}
