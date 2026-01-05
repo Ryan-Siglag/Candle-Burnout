@@ -8,11 +8,11 @@ app_name = 'users'
 
 urlpatterns = [
 
-    path('api/register', CreateUserView.as_view(), name='api-register'),
-    path('api/token', TokenObtainPairView.as_view(), name='get-token'),
-    path('api/token/refresh', TokenRefreshView.as_view(), name='refresh-token'),
+    path('register', CreateUserView.as_view(), name='api-register'),
+    path('token', TokenObtainPairView.as_view(), name='get-token'),
+    path('token/refresh', TokenRefreshView.as_view(), name='refresh-token'),
 
-    path('register/', views.register, name='register'),
-    path('login/', views.login, name='login'),
-    path('logout/', views.logout, name='logout'),
+    path('/old/register/', views.register, name='register'),
+    path('/old/login/', views.login, name='login'),
+    path('/old/logout/', views.logout, name='logout'),
 ]
