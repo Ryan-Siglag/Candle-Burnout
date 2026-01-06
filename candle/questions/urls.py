@@ -5,5 +5,6 @@ app_name = 'questions'
 
 urlpatterns = [
     # path('hello-world', views.hello_world, name='hello-world'),
-    path('inputs', views.inputs, name='inputs'),
+    path('input', views.submit_question_entries, name='input'),
+    path('get', views.get_questions, name="get")
 ]

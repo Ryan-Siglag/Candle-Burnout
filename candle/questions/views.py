@@ -8,6 +8,85 @@ from django.contrib.auth.decorators import login_required
 from datetime import datetime
 from candle.utils import entry_this_week
 
+
+from rest_framework.decorators import api_view, permission_classes
+from rest_framework.response import Response
+from rest_framework import status
+from .serializers import QuestionSerializer, QuestionEntrySerializer
+from rest_framework.permissions import IsAuthenticated
+
+@api_view(['GET'])
+@permission_classes([IsAuthenticated]) 
+def get_questions(request):
+    """
+    GET endpoint to retrieve all questions
+    """
+    questions = Question.objects.all() #TODO: Restrict
+    serializer = QuestionSerializer(questions, many=True)
+    return Response(serializer.data)
+
+@api_view(['POST'])
+@permission_classes([IsAuthenticated])
+def submit_question_entries(request):
+    """
+    POST endpoint to submit multiple question entries
+    Expected format: {
+        "entries": [
+            {"question": 1, "answer": 3, "user": {...}},
+            {"question": 2, "answer": "Another answer"}
+        ]
+    }
+    """
+    entries_data = request.data.get('entries', [])
+    
+    if not entries_data:
+        return Response(
+            {"error": "No entries provided"}, 
+            status=status.HTTP_400_BAD_REQUEST
+        )
+    
+    created_entries = []
+    errors = []
+
+    print(entries_data)
+
+    # serializer = QuestionEntrySerializer(data=request.data, many=True)
+    
+    # if serializer.is_valid():
+    #     result = serializer.save()
+    #     return Response(
+    #         QuestionEntrySerializer(result['entries'], many=True).data,
+    #         status=status.HTTP_201_CREATED
+    #     )
+    print(request.user.id)
+    new_entry = Entry(user=request.user, date=datetime.now())
+    new_entry.save()
+
+    for entry_data in entries_data:
+        print(entry_data)
+        serializer = QuestionEntrySerializer(data=entry_data)
+        if serializer.is_valid():
+            question_entry = serializer.save(entry=new_entry)
+            created_entries.append(serializer.data)
+        else:
+            errors.append({
+                "data": entry_data,
+                "errors": serializer.errors
+            })
+
+    if errors:
+        return Response(
+            {
+                "created": created_entries,
+                "errors": errors
+            },
+            status=status.HTTP_207_MULTI_STATUS
+        )
+    return Response(
+        {"created": created_entries},
+        status=status.HTTP_201_CREATED
+    )
+
 # def hello_world(request):
 #     return render(request, 'hello_world.html')
 

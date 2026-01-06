@@ -49,7 +49,18 @@ INSTALLED_APPS = [
     'display',
 ]
 
-CORS_ALLOWED_ORIGINS = ['http://localhost:5173'] #TODO dynamic
+CORS_ALLOWED_ORIGINS = ['http://localhost:5173'] #TODO dynamic?
+
+CORS_ALLOW_CREDENTIALS = True  
+
+CSRF_TRUSTED_ORIGINS = [
+    "http://localhost:3000",
+    "http://localhost:5173",
+]
+
+CSRF_COOKIE_SAMESITE = 'Lax'
+CSRF_COOKIE_HTTPONLY = False  # Important! Must be False so JS can read it
+CSRF_COOKIE_SECURE = False  # False for local development (True in production with HTTPS)
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
