@@ -1,0 +1,15 @@
+{% extends 'layout.html' %}
+{% block content %}
+<h1>Login User</h1>
+
+    <form action="/users/login/" method="post">
+        {% csrf_token %}
+        {{form}}
+        {% if request.GET.next %}
+            <input type="hidden" name="next" value="{{request.GET.next}}"/>
+        {% endif %}
+        <button>Submit</button>          
+        <p>Don't have an account? <a href="/users/register">register</a>
+    </form>
+
+{% endblock %}
