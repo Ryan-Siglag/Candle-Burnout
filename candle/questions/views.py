@@ -8,7 +8,6 @@ from django.contrib.auth.decorators import login_required
 from datetime import datetime
 from candle.utils import entry_this_week
 
-
 from rest_framework.decorators import api_view, permission_classes
 from rest_framework.response import Response
 from rest_framework import status
@@ -21,6 +20,17 @@ def get_questions(request):
     """
     GET endpoint to retrieve all questions
     """
+    print("**********GET RQEUQSTRs")
+    print(request.user)
+    if entry_this_week(request.user):
+        return Response(
+            # {
+            #     'redirect': '/already-submitted',  # or any route you want
+            #     # 'message': 'You have already submitted a response this week'
+            # },
+            status=status.HTTP_403_FORBIDDEN
+        )
+    print(request.user)
     questions = Question.objects.all() #TODO: Restrict
     serializer = QuestionSerializer(questions, many=True)
     return Response(serializer.data)
@@ -48,16 +58,6 @@ def submit_question_entries(request):
     created_entries = []
     errors = []
 
-    print(entries_data)
-
-    # serializer = QuestionEntrySerializer(data=request.data, many=True)
-    
-    # if serializer.is_valid():
-    #     result = serializer.save()
-    #     return Response(
-    #         QuestionEntrySerializer(result['entries'], many=True).data,
-    #         status=status.HTTP_201_CREATED
-    #     )
     print(request.user.id)
     new_entry = Entry(user=request.user, date=datetime.now())
     new_entry.save()
@@ -86,6 +86,9 @@ def submit_question_entries(request):
         {"created": created_entries},
         status=status.HTTP_201_CREATED
     )
+
+
+#Non React:
 
 # def hello_world(request):
 #     return render(request, 'hello_world.html')

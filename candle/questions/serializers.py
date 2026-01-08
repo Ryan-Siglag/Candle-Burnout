@@ -1,5 +1,5 @@
 from rest_framework import serializers
-from .models import Question, QuestionEntry
+from .models import Question, QuestionEntry, Entry
 
 class QuestionSerializer(serializers.ModelSerializer):
     class Meta:
@@ -12,6 +12,11 @@ class QuestionEntrySerializer(serializers.ModelSerializer):
         model = QuestionEntry
         fields = ['id', 'question', 'score']
         # read_only_fields = ['id']
+
+class EntrySerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Entry
+        fields = ['date', 'cynicism_score', 'exhaustion_score', 'reduced_accomplishment_score', 'total_score']
 
 # class ManyQuestionEntrySerializer(serializers.Serializer):
 #     entries = QuestionEntrySerializer(many=True)

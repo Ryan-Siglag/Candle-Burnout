@@ -1,23 +1,54 @@
 from django.shortcuts import render, redirect
 from django.contrib.auth.decorators import login_required
 from django.core.exceptions import ObjectDoesNotExist
+
 from questions.models import Entry
+from questions.serializers import EntrySerializer
 from candle.utils import entry_this_week
 
-@login_required(login_url="/users/login")
+from rest_framework.decorators import api_view, permission_classes
+from rest_framework.response import Response
+from rest_framework import status
+from rest_framework.permissions import IsAuthenticated
+
+
+@api_view(['GET'])
+@permission_classes([IsAuthenticated]) 
 def recent(request):
     recent_entry = entry_this_week(request.user)
 
     if recent_entry:
-        return render(request, "recent.html", {'recent_entry': recent_entry})
+        serializer = EntrySerializer(recent_entry)
+        return Response(serializer.data)
 
-    return redirect("/questions/inputs")
+    return Response(status=status.HTTP_403_FORBIDDEN)
 
-@login_required(login_url="/users/login")
+@api_view(['GET'])
+@permission_classes([IsAuthenticated]) 
 def all(request):
+    # recent_entry = entry_this_week(request.user)
     all_entries = Entry.objects.filter(user=request.user)
+    if all_entries:
+        serializer = EntrySerializer(all_entries, many=True)
+        return Response(serializer.data)
 
-    if all_entries.exists():
-        return render(request, "all.html", {'all_entries': all_entries})
+    return Response(status=status.HTTP_403_FORBIDDEN)
 
-    return redirect("/questions/inputs")
+#Non React
+# @login_required(login_url="/users/login")
+# def recent(request):
+#     recent_entry = entry_this_week(request.user)
+
+#     if recent_entry:
+#         return render(request, "recent.html", {'recent_entry': recent_entry})
+
+#     return redirect("/questions/inputs")
+
+# @login_required(login_url="/users/login")
+# def all(request):
+#     all_entries = Entry.objects.filter(user=request.user)
+
+#     if all_entries.exists():
+#         return render(request, "all.html", {'all_entries': all_entries})
+
+#     return redirect("/questions/inputs")
