@@ -10,9 +10,6 @@ interface Question {
   created_at: string;
 }
 
-// interface Redirect {
-//     redirect: string;
-// }
 
 interface QuestionEntry {
   question: number;
@@ -57,37 +54,6 @@ const Questions = () => {
         .finally(() => {
             setLoading(false);
         });
-        /*
-        try {
-            // const response = await fetch('http://localhost:8000/api/questions/get', {
-            //     credentials: 'include',
-            // });
-
-
-            // if (response.status === 403) {
-            //     navigate('/recent-entry');
-            //     return;
-            // }
-
-            
-
-            // const data: Question[] = await response.json();
-
-            // if (!response.ok) throw new Error('Failed to fetch questions');
-
-            
-            
-            // Initialize scores object
-            const initialScores: Scores = {};
-            questions.forEach(q => {
-                initialScores[q.id] = null;
-            });
-            setScores(initialScores);
-        } catch (err) {
-            setError(err instanceof Error ? err.message : 'An error occurred');
-        } finally {
-            setLoading(false);
-        }*/
     };
 
     const getCsrfToken = (): string | null => {
@@ -139,36 +105,6 @@ const Questions = () => {
         .finally(() => {
             setSubmitting(false);
         });
-
-        // try {
-        // const csrfToken = getCsrfToken();
-        // const response = await fetch('http://localhost:8000/api/questions/input', {
-        //     method: 'POST',
-        //     credentials: 'include',
-        //     headers: {
-        //     'Content-Type': 'application/json',
-        //     'X-CSRFToken': csrfToken || '', 
-        //     },
-        //     body: JSON.stringify({ entries })
-        // });
-
-        // if (!response.ok) throw new Error('Failed to submit answers');
-        
-        // const data = await response.json(); //Unused
-        // setSuccess(true);
-        
-        // // Reset form
-
-        // const resetScores: Scores = {};
-        // questions.forEach(q => {
-        //     resetScores[q.id] = null;
-        // });
-        // setScores(resetScores);
-        // } catch (err) {
-        // setError(err instanceof Error ? err.message : 'An error occurred');
-        // } finally {
-        // setSubmitting(false);
-        // }
     };
 
     if (loading) {

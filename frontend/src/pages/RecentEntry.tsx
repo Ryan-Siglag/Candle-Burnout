@@ -39,21 +39,6 @@ const RecentEntry = () => {
     .finally(() => {
         setLoading(false);
     });
-
-    // try {
-    //   const response = await fetch('http://localhost:8000/api/display/recent', {
-    //     credentials: 'include',
-    //   });
-      
-    //   if (!response.ok) throw new Error('Failed to fetch recent entry');
-      
-    //   const data: Entry = await response.json();
-    //   setEntry(data);
-    // } catch (err) {
-    //   setError(err instanceof Error ? err.message : 'An error occurred');
-    // } finally {
-    //   setLoading(false);
-    // }
   };
 
   const getScoreColor = (score: number): string => {

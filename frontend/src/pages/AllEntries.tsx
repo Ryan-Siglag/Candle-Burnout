@@ -49,44 +49,15 @@ const AllEntries = () => {
     })
     .catch((err) => {
         console.log(err)
-
         if (err.status === 403){
           setEntries([]);
           return;
         }
-
         setError(err instanceof Error ? err.message : 'An error occurred');
     })
     .finally(() => {
         setLoading(false);
     });
-
-    // try {
-    //   const response = await fetch('http://localhost:8000/api/display/all', {
-    //     credentials: 'include',
-    //   });
-      
-    //   if (!response.ok) throw new Error('Failed to fetch entries');
-      
-    //   const data = await response.json();
-    //   console.log(data.entries)
-    //   setEntries(data || []);
-      
-    //   // Calculate averages
-    //   if (data.entries && data.entries.length > 0) {
-    //     const avg = {
-    //       avg_cynicism: data.entries.reduce((sum: number, e: Entry) => sum + e.cynicism_score, 0) / data.entries.length,
-    //       avg_exhaustion: data.entries.reduce((sum: number, e: Entry) => sum + e.exhaustion_score, 0) / data.entries.length,
-    //       avg_reduced_accomplishment: data.entries.reduce((sum: number, e: Entry) => sum + e.reduced_accomplishment_score, 0) / data.entries.length,
-    //       avg_total: data.entries.reduce((sum: number, e: Entry) => sum + e.total_score, 0) / data.entries.length,
-    //     };
-    //     setAverages(avg);
-    //   }
-    // } catch (err) {
-    //   setError(err instanceof Error ? err.message : 'An error occurred');
-    // } finally {
-    //   setLoading(false);
-    // }
   };
 
   const getScoreColor = (score: number): string => {
@@ -122,12 +93,6 @@ const AllEntries = () => {
   if (loading) {
     return (
       <Loading>Loading your entries...</Loading>
-      // <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-slate-50 to-slate-100">
-      //   <div className="flex flex-col items-center">
-      //     <div className="animate-spin rounded-full h-16 w-16 border-b-4 border-blue-600"></div>
-      //     <p className="mt-4 text-gray-600 text-lg">Loading your entries...</p>
-      //   </div>
-      // </div>
     );
   }
 
@@ -179,31 +144,6 @@ const AllEntries = () => {
               {Math.round(averages.avg_total)}
             </p>
           </div>
-          {/* <div>
-            <svg className="w-32 h-32 transform -rotate-90">
-              <circle
-                cx="64"
-                cy="64"
-                r="56"
-                stroke="currentColor"
-                strokeWidth="8"
-                fill="none"
-                className="text-gray-200"
-              />
-              <circle
-                cx="64"
-                cy="64"
-                r="56"
-                stroke="currentColor"
-                strokeWidth="8"
-                fill="none"
-                strokeDasharray={`${2 * Math.PI * 56}`}
-                strokeDashoffset={`${2 * Math.PI * 56 * (1 - averages.avg_total / 100)}`}
-                strokeLinecap="round"
-                className={`${getScoreColor(averages.avg_total)}`}
-              />
-            </svg>
-          </div> */}
         </div>
       </div>
 

@@ -28,20 +28,11 @@ const Navbar = ({ isAuthenticated }: NavbarProps) => {
             to="/" 
             className="flex items-center space-x-2 text-white hover:text-blue-100 transition"
           >
-            {/* <svg 
-              className="w-8 h-8" 
-              viewBox="0 0 24 24" 
-              fill="currentColor"
-            >
-            
-              <path d="M12 2C10.9 2 10 2.9 10 4C10 4.7 10.4 5.4 11 5.7V7H9V9H11V20C11 21.1 11.9 22 13 22C14.1 22 15 21.1 15 20V9H17V7H15V5.7C15.6 5.4 16 4.7 16 4C16 2.9 15.1 2 14 2H12M12 3.5C12.3 3.5 12.5 3.7 12.5 4C12.5 4.3 12.3 4.5 12 4.5C11.7 4.5 11.5 4.3 11.5 4C11.5 3.7 11.7 3.5 12 3.5M13 9V20H13V9Z" />
-            </svg> */}
             <img
               className="w-8 h-8" 
               src={candle_logo}
               alt="React Jobs"
             />
-            {/* <img src='../assets/images/candle-logo.png' /> */}
             <span className="text-xl font-bold">Candle</span>
           </Link>
 

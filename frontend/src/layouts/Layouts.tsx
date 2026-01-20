@@ -1,9 +1,6 @@
-// components/Layout.tsx
 import Navbar from '../components/Navbar';
 import type { ReactNode } from 'react';
-import { jwtDecode } from "jwt-decode";
 import api from "../api";
-// import candle_logo_bw from '../assets/images/candle_logo_bw.png'
 import { REFRESH_TOKEN } from "../constants";
 import { useState, useEffect } from 'react';
 import { useLocation } from "react-router-dom";
@@ -35,33 +32,11 @@ const Layout = ({ children }: LayoutProps) => {
     }
 
     useEffect(() => {
-        // // Check if user has access token
-        // const token = localStorage.getItem(REFRESH_TOKEN);
-        // console.log()
-        // if (!token) {
-        //     setIsAuthenticated(false);
-        //     return;
-        // }
-
-        // const decoded = jwtDecode(token);
-        // const tokenExpiration = decoded.exp;
-        // const now = Date.now() / 1000;
-        
-        // console.log(tokenExpiration)
-        // console.log(now)
-
-        // if (tokenExpiration === undefined || tokenExpiration < now) {
-        //     setIsAuthenticated(false);
-        // } else {
-        //     setIsAuthenticated(true);
-        // }
 
         checkValidation()
         window.scrollTo(0, 0);
 
      }, [location.pathname]);
-
-     
 
   return (
     <>

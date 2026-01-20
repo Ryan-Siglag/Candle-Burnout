@@ -1,4 +1,3 @@
-// Home.tsx
 import { Link } from 'react-router-dom';
 import candle_logo_bw from '../assets/images/candle_logo_bw.png'
 

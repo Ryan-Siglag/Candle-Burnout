@@ -11,7 +11,6 @@ from rest_framework.response import Response
 from rest_framework import status
 from rest_framework.permissions import IsAuthenticated
 
-
 @api_view(['GET'])
 @permission_classes([IsAuthenticated]) 
 def recent(request):
@@ -25,29 +24,9 @@ def recent(request):
 @api_view(['GET'])
 @permission_classes([IsAuthenticated]) 
 def all(request):
-    # recent_entry = entry_this_week(request.user)
     all_entries = Entry.objects.filter(user=request.user)
     if all_entries:
         serializer = EntrySerializer(all_entries, many=True)
         return Response(serializer.data)
 
     return Response(status=status.HTTP_403_FORBIDDEN)
-
-#Non React
-# @login_required(login_url="/users/login")
-# def recent(request):
-#     recent_entry = entry_this_week(request.user)
-
-#     if recent_entry:
-#         return render(request, "recent.html", {'recent_entry': recent_entry})
-
-#     return redirect("/questions/inputs")
-
-# @login_required(login_url="/users/login")
-# def all(request):
-#     all_entries = Entry.objects.filter(user=request.user)
-
-#     if all_entries.exists():
-#         return render(request, "all.html", {'all_entries': all_entries})
-
-#     return redirect("/questions/inputs")

@@ -13,8 +13,4 @@ urlpatterns = [
     path('register', CreateUserView.as_view(), name='api-register'),
     path("token", TokenObtainPairView.as_view(), name="get_token"),
     path('token/refresh', TokenRefreshView.as_view(), name='refresh-token'),
-
-    # path('old/register', views.register, name='register'),
-    # path('old/login', views.login, name='login'),
-    # path('old/logout', views.logout, name='logout'),
 ]

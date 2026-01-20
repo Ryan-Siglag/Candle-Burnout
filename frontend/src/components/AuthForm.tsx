@@ -18,10 +18,6 @@ function Form({ route, method }: { route: string; method: "login" | "register" }
         refresh: string;
     }
 
-    // if (method === "login") {
-
-    // }
-
     const handleSubmit = async (e: React.FormEvent<HTMLFormElement>): Promise<void> => {
         setLoading(true);
         setError("");
@@ -49,7 +45,6 @@ function Form({ route, method }: { route: string; method: "login" | "register" }
             }
         } catch (error: any) {
             setError("Username or password invalid");
-            // setError(error.response?.data?.detail || error.message || "An error occurred");
         } finally {
             setLoading(false);
         }
