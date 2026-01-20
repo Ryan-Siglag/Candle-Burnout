@@ -3,6 +3,7 @@ import { jwtDecode } from "jwt-decode";
 import api from "../api";
 import { REFRESH_TOKEN, ACCESS_TOKEN } from "../constants";
 import { useState, useEffect, type ReactNode } from "react";
+import Loading from "./Loading";
 
 
 function ProtectedRoute({ children }: { children: ReactNode }) {
@@ -15,7 +16,7 @@ function ProtectedRoute({ children }: { children: ReactNode }) {
     const refreshToken = async () => {
         const refreshToken = localStorage.getItem(REFRESH_TOKEN);
         try {
-            const res = await api.post("/token/refresh/", {
+            const res = await api.post("http://127.0.0.1:8000/api/users/token/refresh", {
                 refresh: refreshToken,
             });
             if (res.status === 200) {
@@ -32,6 +33,7 @@ function ProtectedRoute({ children }: { children: ReactNode }) {
 
     const auth = async () => {
         const token = localStorage.getItem(ACCESS_TOKEN);
+        console.log(token)
         if (!token) {
             setIsAuthorized(false);
             return;
@@ -48,7 +50,7 @@ function ProtectedRoute({ children }: { children: ReactNode }) {
     };
 
     if (isAuthorized === null) {
-        return <div>Loading...</div>;
+        return <Loading>Loading...</Loading>;
     }
 
     return isAuthorized ? children : <Navigate to="/login" />;

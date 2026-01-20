@@ -8,13 +8,19 @@ const api = axios.create({
 
 api.interceptors.request.use(
     (config):InternalAxiosRequestConfig => {
+        console.log("Getting Token")
         const token = localStorage.getItem(ACCESS_TOKEN)
+        console.log("Token "+ token)
         if (token) {
+            console.log(`Bearer${token}`)
             config.headers.Authorization = `Bearer ${token}`
         }
         return config
     },
-    (error) => Promise.reject(error)
+    (error) => { 
+        console.log("Error!")
+        Promise.reject(error)
+    }
 )
 
 export default api
