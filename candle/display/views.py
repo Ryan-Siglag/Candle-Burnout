@@ -16,7 +16,6 @@ from rest_framework.permissions import IsAuthenticated
 @permission_classes([IsAuthenticated]) 
 def recent(request):
     recent_entry = entry_this_week(request.user)
-
     if recent_entry:
         serializer = EntrySerializer(recent_entry)
         return Response(serializer.data)

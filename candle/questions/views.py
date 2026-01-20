@@ -7,6 +7,7 @@ from django.forms import formset_factory
 from django.contrib.auth.decorators import login_required
 from datetime import datetime
 from candle.utils import entry_this_week
+from .utils import shift_range
 
 from rest_framework.decorators import api_view, permission_classes
 from rest_framework.response import Response
@@ -32,6 +33,28 @@ def get_questions(request):
         )
     print(request.user)
     questions = Question.objects.all() #TODO: Restrict
+
+
+    question_pks = []
+    def select_question(question_type):
+        association = Type_Cat_Associations.objects.filter(type=question_type).values_list('category', flat=True)
+        valid_questions = Question.objects.exclude(pk__in=question_pks).filter(category__in=association)
+
+        pks = valid_questions.values_list('pk', flat=True)
+        rand_pk = choice(pks)
+        question_pks.append(rand_pk)
+
+        return rand_pk
+
+    questions = []
+    for question_type in Type.objects.filter(used=True):
+        new_ques = Question.objects.filter(pk=select_question(question_type)).first()
+        questions.append(new_ques)
+
+    # return questions
+
+
+    # print(get_questions(request))
     serializer = QuestionSerializer(questions, many=True)
     return Response(serializer.data)
 
@@ -62,17 +85,51 @@ def submit_question_entries(request):
     new_entry = Entry(user=request.user, date=datetime.now())
     new_entry.save()
 
+    result_scores = { # 0-Numerator 1-Denomenator 2-Calculated
+        "Reduced accomplishment": [0, 0, 0],
+        "Emotional exhaustion": [0, 0, 0],
+        "Cynicism": [0, 0, 0],
+    }
+
+    def update_scores(score, category):
+        associations = Res_Cat_Associations.objects.filter(category=category.pk)
+
+        for association in associations:
+            name = association.result.name
+            result_scores[name][0] += score*association.correlation
+            result_scores[name][1] += abs(association.correlation)
+            result_scores[name][2] = result_scores[name][0] / result_scores[name][1]
+
+        print(result_scores)
+
     for entry_data in entries_data:
         print(entry_data)
         serializer = QuestionEntrySerializer(data=entry_data)
         if serializer.is_valid():
             question_entry = serializer.save(entry=new_entry)
+            question = Question.objects.filter(pk=question_entry.question.pk).first()
+            category = Category.objects.filter(pk=question.category.pk).first()
+
+            raw_score = question_entry.score
+            score = shift_range(raw_score, 0, 5, -1, 1)
+            # score = (((raw_score) * 2) / (5)) - 1 #Converts 0-5 range to -1-1 range
+            print(score)
+            update_scores(score, category)
+
             created_entries.append(serializer.data)
         else:
             errors.append({
                 "data": entry_data,
                 "errors": serializer.errors
             })
+            
+    new_entry.reduced_accomplishment_score = shift_range(result_scores['Reduced accomplishment'][2], -1, 1, 0, 100)
+    new_entry.cynicism_score = shift_range(result_scores['Cynicism'][2], -1, 1, 0, 100)
+    new_entry.exhaustion_score = shift_range(result_scores['Emotional exhaustion'][2], -1, 1, 0, 100)
+
+    new_entry.total_score = shift_range((result_scores['Reduced accomplishment'][2]+result_scores['Cynicism'][2]+result_scores['Emotional exhaustion'][2]) / 3, -1, 1, 0, 100)
+
+    new_entry.save()
 
     if errors:
         return Response(
