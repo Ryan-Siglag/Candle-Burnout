@@ -57,6 +57,7 @@ class QuestionEntry(models.Model):
     entry = models.ForeignKey(Entry, on_delete=models.CASCADE)
     question = models.ForeignKey(Question, on_delete=models.CASCADE)
 
+    #Corresponding responses and raw scores
     class Agreement(models.IntegerChoices):
         STRONGLY_DISAGREE = 0
         DISAGREE = 1

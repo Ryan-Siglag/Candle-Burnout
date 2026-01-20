@@ -14,6 +14,10 @@ from rest_framework.permissions import IsAuthenticated
 @api_view(['GET'])
 @permission_classes([IsAuthenticated]) 
 def recent(request):
+    '''
+    Returns a single most recent entry object for a user (or 403 status)
+    '''
+
     recent_entry = entry_this_week(request.user)
     if recent_entry:
         serializer = EntrySerializer(recent_entry)
@@ -24,6 +28,10 @@ def recent(request):
 @api_view(['GET'])
 @permission_classes([IsAuthenticated]) 
 def all(request):
+    '''
+    Returns all entry objects for a user (or 403 status)
+    '''
+
     all_entries = Entry.objects.filter(user=request.user)
     if all_entries:
         serializer = EntrySerializer(all_entries, many=True)

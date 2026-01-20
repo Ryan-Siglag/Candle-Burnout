@@ -21,17 +21,21 @@ def get_questions(request):
     """
     GET endpoint to retrieve all questions
     """
-    print("**********GET RQEUQSTRs")
-    print(request.user)
+
+    #Only allow one entry per week
     if entry_this_week(request.user):
         return Response(
             status=status.HTTP_403_FORBIDDEN
         )
-    print(request.user)
     questions = Question.objects.all()
 
-    question_pks = []
+    question_pks = [] #List of generated questions
     def select_question(question_type):
+        '''
+        Returns a new selected question given a question type. The question type
+        outlines which categories may be pulled from
+        '''
+
         association = Type_Cat_Associations.objects.filter(type=question_type).values_list('category', flat=True)
         valid_questions = Question.objects.exclude(pk__in=question_pks).filter(category__in=association)
 
@@ -41,10 +45,12 @@ def get_questions(request):
 
         return rand_pk
 
-    questions = []
+    questions = [] #List of generated question objects
+
+    #Compliles questions as objects rather than pks
     for question_type in Type.objects.filter(used=True):
         new_ques = Question.objects.filter(pk=select_question(question_type)).first()
-        questions.append(new_ques)
+        questions.append(new_ques) 
 
     serializer = QuestionSerializer(questions, many=True)
     return Response(serializer.data)
@@ -72,10 +78,10 @@ def submit_question_entries(request):
     created_entries = []
     errors = []
 
-    print(request.user.id)
     new_entry = Entry(user=request.user, date=datetime.now())
     new_entry.save()
 
+    #Stores scores for eqch result
     result_scores = { # 0-Numerator 1-Denomenator 2-Calculated
         "Reduced accomplishment": [0, 0, 0],
         "Emotional exhaustion": [0, 0, 0],
@@ -87,14 +93,11 @@ def submit_question_entries(request):
 
         for association in associations:
             name = association.result.name
-            result_scores[name][0] += score*association.correlation
-            result_scores[name][1] += abs(association.correlation)
-            result_scores[name][2] = result_scores[name][0] / result_scores[name][1]
+            result_scores[name][0] += score*association.correlation #Add to numerator
+            result_scores[name][1] += abs(association.correlation) #Add to denomenator
+            result_scores[name][2] = result_scores[name][0] / result_scores[name][1] #Computer current score
 
-        print(result_scores)
-
-    for entry_data in entries_data:
-        print(entry_data)
+    for entry_data in entries_data: #Update score for each question
         serializer = QuestionEntrySerializer(data=entry_data)
         if serializer.is_valid():
             question_entry = serializer.save(entry=new_entry)
@@ -102,7 +105,7 @@ def submit_question_entries(request):
             category = Category.objects.filter(pk=question.category.pk).first()
 
             raw_score = question_entry.score
-            score = shift_range(raw_score, 0, 5, -1, 1)
+            score = shift_range(raw_score, 0, 5, -1, 1) #Score in range -1, 1 to simplify arithmatic
             update_scores(score, category)
 
             created_entries.append(serializer.data)
@@ -111,7 +114,8 @@ def submit_question_entries(request):
                 "data": entry_data,
                 "errors": serializer.errors
             })
-            
+    
+    #Store scores in range 0, 100
     new_entry.reduced_accomplishment_score = shift_range(result_scores['Reduced accomplishment'][2], -1, 1, 0, 100)
     new_entry.cynicism_score = shift_range(result_scores['Cynicism'][2], -1, 1, 0, 100)
     new_entry.exhaustion_score = shift_range(result_scores['Emotional exhaustion'][2], -1, 1, 0, 100)
