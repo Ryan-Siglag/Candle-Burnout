@@ -112,8 +112,9 @@ DATABASES = {
         'NAME': 'candle',
         'USER': 'root',
         'PASSWORD': os.environ.get('DB_PASSWORD'),
-        'HOST': '127.0.0.1',
-        'PORT': '3306',
+        'HOST': 'mysql',
+        'PORT': '3306', #Local
+        # 'PORT': '5432:3306', #On Docker
         # 'OPTIONS': {
         #     'auth_plugin': 'mysql_native_password',
         # }
