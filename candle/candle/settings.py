@@ -102,6 +102,9 @@ WSGI_APPLICATION = 'candle.wsgi.application'
 # Database
 # https://docs.djangoproject.com/en/6.0/ref/settings/#databases
 
+print("DB_PASSWORD is:", os.environ.get('DB_PASSWORD'))
+# print("DB_HOST is:", os.environ.get('DB_HOST'))
+
 DATABASES = {
     # 'default': {
     #     'ENGINE': 'django.db.backends.sqlite3',
