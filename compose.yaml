@@ -3,6 +3,10 @@ services:
     build: ./frontend
     ports:
       - "80:80"
+    env_file:
+      - ./.env
+    args:
+      - VITE_API_URL=${VITE_API_URL}
     depends_on:
       - backend
 

@@ -25,8 +25,7 @@ const RecentEntry = () => {
     
 
     api
-    .get("http://localhost:8000/api/display/recent")
-    .then((res) => {
+    .get(`${import.meta.env.VITE_API_URL}/api/display/recent`)    .then((res) => {
         setEntry(res.data);
     })
     .catch((err) => {

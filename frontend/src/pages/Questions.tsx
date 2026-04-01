@@ -41,8 +41,7 @@ const Questions = () => {
   useEffect(() => { fetchQuestions(); }, []);
 
   const fetchQuestions = async (): Promise<void> => {
-    api.get("http://localhost:8000/api/questions/get")
-      .then((res) => { setQuestions(res.data); })
+    api.get(`${import.meta.env.VITE_API_URL}/api/questions/get`)      .then((res) => { setQuestions(res.data); })
       .catch((err) => {
         if (err.status === 403) { navigate('/recent-entry'); return; }
         setError(err instanceof Error ? err.message : 'An error occurred');
@@ -73,8 +72,7 @@ const Questions = () => {
       return;
     }
 
-    api.post("http://localhost:8000/api/questions/input", { entries })
-      .then(() => { setSuccess(true); navigate('/recent-entry'); })
+    api.post(`${import.meta.env.VITE_API_URL}/api/questions/input`, { entries })      .then(() => { setSuccess(true); navigate('/recent-entry'); })
       .catch((err) => { console.log(err); alert(err); })
       .finally(() => { setSubmitting(false); });
   };

@@ -31,7 +31,7 @@ const AllEntries = () => {
   const fetchAllEntries = async (): Promise<void> => {
 
     api
-    .get('http://localhost:8000/api/display/all')
+    .get(`${import.meta.env.VITE_API_URL}/api/display/all`)
     .then((res) => {
         const data = res.data;
         setEntries(data || []);
