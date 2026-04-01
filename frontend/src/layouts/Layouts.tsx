@@ -17,7 +17,7 @@ const Layout = ({ children }: LayoutProps) => {
     const checkValidation = async () => {
       const refreshToken = localStorage.getItem(REFRESH_TOKEN);
         try {
-            const res = await api.post("http://127.0.0.1:8000/api/users/token/refresh", {
+            const res = await api.post(`${import.meta.env.VITE_API_URL}/api/users/token/refresh`, {
                 refresh: refreshToken,
             });
             if (res.status === 200) {
