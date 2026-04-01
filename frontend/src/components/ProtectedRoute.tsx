@@ -33,7 +33,7 @@ function ProtectedRoute({ children }: { children: ReactNode }) {
 
     const auth = async () => {
         const token = localStorage.getItem(ACCESS_TOKEN);
-        console.log(token)
+        // console.log(token)
         if (!token) {
             setIsAuthorized(false);
             return;

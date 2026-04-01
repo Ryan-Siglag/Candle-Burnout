@@ -83,8 +83,8 @@ def submit_question_entries(request):
 
     #Stores scores for eqch result
     result_scores = { # 0-Numerator 1-Denomenator 2-Calculated
-        "Reduced accomplishment": [0, 0, 0],
-        "Emotional exhaustion": [0, 0, 0],
+        "Reduced Accomplishment": [0, 0, 0],
+        "Exhaustion": [0, 0, 0],
         "Cynicism": [0, 0, 0],
     }
 
@@ -116,11 +116,11 @@ def submit_question_entries(request):
             })
     
     #Store scores in range 0, 100
-    new_entry.reduced_accomplishment_score = shift_range(result_scores['Reduced accomplishment'][2], -1, 1, 0, 100)
+    new_entry.reduced_accomplishment_score = shift_range(result_scores['Reduced Accomplishment'][2], -1, 1, 0, 100)
     new_entry.cynicism_score = shift_range(result_scores['Cynicism'][2], -1, 1, 0, 100)
-    new_entry.exhaustion_score = shift_range(result_scores['Emotional exhaustion'][2], -1, 1, 0, 100)
+    new_entry.exhaustion_score = shift_range(result_scores['Exhaustion'][2], -1, 1, 0, 100)
 
-    new_entry.total_score = shift_range((result_scores['Reduced accomplishment'][2]+result_scores['Cynicism'][2]+result_scores['Emotional exhaustion'][2]) / 3, -1, 1, 0, 100)
+    new_entry.total_score = shift_range((result_scores['Reduced Accomplishment'][2]+result_scores['Cynicism'][2]+result_scores['Exhaustion'][2]) / 3, -1, 1, 0, 100)
 
     new_entry.save()
 

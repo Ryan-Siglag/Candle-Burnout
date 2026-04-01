@@ -35,8 +35,8 @@ const AllEntries = () => {
     .then((res) => {
         const data = res.data;
         setEntries(data || []);
-        console.log(data)
-        console.log(data.entries)
+        // console.log(data)
+        // console.log(data.entries)
         if (data && data.length > 0) {
         const avg = {
           avg_cynicism: data.reduce((sum: number, e: Entry) => sum + e.cynicism_score, 0) / data.length,
