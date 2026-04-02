@@ -39,15 +39,16 @@ INSTALLED_APPS = [
     'display',
 ]
 
-# FIXED: Added your VM's IP to CORS origins. Since your frontend browser 
-# hits the VM IP, the backend needs to explicitly trust it.
 CORS_ALLOWED_ORIGINS = [
     "http://localhost",
     "http://localhost:80",
     "http://localhost:3000",
     "http://localhost:5173",
-    "http://192.168.1.168",      # Added for normal HTTP
-    "http://192.168.1.168:5173", # Added if your frontend runs on 5173
+    "http://192.168.1.168",      
+    "http://192.168.1.168:5173", 
+    "http://127.0.0.1",
+    "http://127.0.0.1:80",
+    "http://127.0.0.1:5173",
 ] 
 
 CORS_ALLOW_CREDENTIALS = True  
