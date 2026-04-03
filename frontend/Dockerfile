@@ -17,7 +17,6 @@ FROM nginx:alpine
 
 COPY --from=builder /app/dist /usr/share/nginx/html
 
-# Optional: custom nginx config for SPA routing (handles client-side routes)
 RUN printf 'server {\n\
     listen 80;\n\
     root /usr/share/nginx/html;\n\
