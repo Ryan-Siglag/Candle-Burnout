@@ -15,7 +15,8 @@ RUN npx vite build
 # Stage 2: Serve with Nginx
 FROM nginx:alpine
 
-COPY --from=builder /app/dist /usr/share/nginx/html
+RUN mkdir -p /usr/share/nginx/html/candle-burnout-tracker
+COPY --from=builder /app/dist /usr/share/nginx/html/candle-burnout-tracker
 
 RUN printf 'server {\n\
     listen 80;\n\
