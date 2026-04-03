@@ -49,6 +49,7 @@ CORS_ALLOWED_ORIGINS = [
     "http://127.0.0.1",
     "http://127.0.0.1:80",
     "http://127.0.0.1:5173",
+    "https://nourish-net.com",
 ] 
 
 CORS_ALLOW_CREDENTIALS = True  
