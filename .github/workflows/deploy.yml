@@ -9,11 +9,15 @@ jobs:
     runs-on: self-hosted
 
     steps:
-      # Step 1: Pull the latest code from GitHub onto the VM
       - name: Checkout Code
         uses: actions/checkout@v4
 
-      # Step 2: Rebuild the Docker containers with the new code
+      - name: Create .env file
+        run: |
+          echo "DB_PASSWORD=${{ secrets.DB_PASSWORD }}" > .env
+          echo "VITE_API_URL=${{ secrets.VITE_API_URL }}" >> .env
+          echo "SECRET_KEY=${{ secrets.SECRET_KEY }}" >> .env
+
       - name: Rebuild and restart Docker containers
         run: |
           docker compose down
