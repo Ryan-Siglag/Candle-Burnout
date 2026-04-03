@@ -1,9 +1,11 @@
 name: Docker CI/CD Pipeline
 
+# Trigger on main push
 on:
   push:
     branches: [ "main" ]
 
+# Update site on server
 jobs:
   deploy:
     runs-on: self-hosted
