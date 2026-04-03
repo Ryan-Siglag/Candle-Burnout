@@ -6,7 +6,7 @@ on:
 
 jobs:
   deploy:
-    runs-on: candle-host
+    runs-on: self-hosted
 
     steps:
       # Step 1: Pull the latest code from GitHub onto the VM
